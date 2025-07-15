@@ -649,11 +649,13 @@
     videos.forEach((video, idx) => {
       const card = document.createElement('div');
       card.className = 'video-card';
+      // Extract TikTok video ID from embed URL for redirect
+      let videoId = '';
+      const match = video.embed.match(/embed\/(\d+)/);
+      if (match) videoId = match[1];
+      const tiktokUrl = videoId ? `https://www.tiktok.com/@tiktok/video/${videoId}` : video.embed;
       card.innerHTML = `
         <div class="video-wrapper">
-          <div class="video-placeholder" id="placeholder-${idx}">
-            <img src='WhatsApp Image 2025-07-11 at 03.41.18_a9ecfbc3.jpg' alt='TJR Logo' />
-          </div>
           <div class="play-overlay" id="playbtn-${idx}"></div>
         </div>
         <div class="category-label">${video.category}</div>
@@ -662,10 +664,9 @@
         <div class="video-date">${video.date}</div>
       `;
       grid.appendChild(card);
-      // Add play button event
+      // Add play button event to redirect to TikTok page
       card.querySelector(`#playbtn-${idx}`).addEventListener('click', function() {
-        const wrapper = card.querySelector('.video-wrapper');
-        wrapper.innerHTML = `<iframe src=\"${video.embed}\" allowfullscreen></iframe>`;
+        window.open(tiktokUrl, '_blank');
       });
     });
   </script>
